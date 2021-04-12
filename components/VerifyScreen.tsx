@@ -1,9 +1,19 @@
-import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import React,{useState, useEffect} from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator} from 'react-native'
 import colors from '../assets/colors'
 import Illustration from '../assets/illu-icon.svg'
+import {LinearGradient} from 'expo-linear-gradient'
 
 const VerifyScreen = () => {
+
+    const [btnPressed, setBtnPressed] =  useState(false)
+
+    const toggle_Btn = () => {
+        setBtnPressed(!btnPressed)
+        //mock api call
+        setTimeout(() => setBtnPressed(false), 1000);
+    }
+
     return (
         <View style={styles.root}>
             <View style={styles.textWrapper}>
@@ -14,8 +24,14 @@ const VerifyScreen = () => {
                 <Illustration></Illustration>
             </View>
             <View style={styles.verifyButtonContainer}>
-                <TouchableOpacity style={styles.verifyButton}>
-                        <Text style={styles.verifyText}>Verify</Text>
+                <TouchableOpacity  onPress={toggle_Btn} disabled={btnPressed}>
+                    <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} 
+                                    colors={['#FFBD56', '#FFAB28']} style={styles.verifyButton}>
+                        {
+                            btnPressed ? <ActivityIndicator color={colors.white} />
+                                       : <Text style={styles.verifyText}>Verify</Text>
+                        }
+                    </LinearGradient>
                 </TouchableOpacity>
             </View>
             
@@ -75,6 +91,10 @@ const styles= StyleSheet.create({
         paddingVertical: 17,
         borderRadius: 8,
         alignItems: 'center',
+    },
+    linear_gradient: {
+        width: '100%',
+        height: '100%'
     }
 })
 export default VerifyScreen
