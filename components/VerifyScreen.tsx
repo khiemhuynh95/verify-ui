@@ -13,6 +13,18 @@ const VerifyScreen = () => {
     
     const [seconds, setSeconds] = useState(60);
   
+    const [codeValue, setCodeValue] = useState('')
+    const [shouldClearCode, setShouldClearCode] = useState(false)
+
+    const getValue = useCallback(
+        (value) => {
+            //console.log(value)
+            setCodeValue(value)
+        },
+        [],
+    )
+
+
 
     const toggle_Btn = () => {
         setBtnPressed(!btnPressed)
@@ -20,11 +32,12 @@ const VerifyScreen = () => {
         setTimeout(() => {
             setBtnPressed(false)
             //alert
-        }, 1000);
+        }, 2000);
     }
 
     const handle_resendBtn = () => {
         setSeconds(60)
+        setCodeValue('')
     }
 
     return (
@@ -36,19 +49,21 @@ const VerifyScreen = () => {
             <View style={styles.imageContainer}>
                 <Illustration/>
             </View>
-            <View style={styles.verifyButtonContainer}>
-                <TouchableOpacity style={btnPressed && {opacity: 0.5}} onPress={toggle_Btn} disabled={btnPressed}>
-                    <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} 
-                                    colors={['#FFBD56', '#FFAB28']} style={styles.verifyButton}>
-                        {
-                            btnPressed ? <ActivityIndicator style={styles.indicator} color={colors.white}/>
-                                       : <Text style={styles.verifyText}>Verify</Text>
-                        }
-                    </LinearGradient>
-                </TouchableOpacity>
-            </View>
-
-            <AnimatedCodeField />
+            {
+                (codeValue.length == 4) &&
+                <View style={styles.verifyButtonContainer}>
+                    <TouchableOpacity style={btnPressed && {opacity: 0.5}} onPress={toggle_Btn} disabled={btnPressed}>
+                        <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} //horizontal linear
+                                        colors={['#FFBD56', '#FFAB28']} style={styles.verifyButton}>
+                            {
+                                btnPressed ? <ActivityIndicator style={styles.indicator} color={colors.white}/>
+                                        : <Text style={styles.verifyText}>Verify</Text>
+                            }
+                        </LinearGradient>
+                    </TouchableOpacity>
+                </View>
+            }
+            <AnimatedCodeField getValue={getValue} clearCode={true}/>
 
             <View style={styles.line}>
                 <Text style={{color: colors.text.light,fontSize: 12, lineHeight: 14, letterSpacing: 0.02, marginRight: 23}}>

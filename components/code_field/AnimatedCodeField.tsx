@@ -38,7 +38,7 @@ const animateCell = ({hasValue, index, isFocused}) => {
   ]).start();
 };
 
-const AnimatedCodeField = () => {
+const AnimatedCodeField = ({getValue, clearCode}) => {
   
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
@@ -47,10 +47,13 @@ const AnimatedCodeField = () => {
     setValue,
   });
 
-  // useEffect(() => {
-  //   setValue(passedValue)
-  //   console.log(value)
-  // }, [passedValue])
+  useEffect(() => {
+    getValue(value)//passing code value back to parent
+  }, [value])
+
+  useEffect(() => {
+    
+  }, [])
 
   const renderCell = ({index, symbol, isFocused}) => {
     const hasValue = Boolean(symbol);
