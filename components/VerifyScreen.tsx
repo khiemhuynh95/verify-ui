@@ -7,7 +7,7 @@ import AnimatedCodeField from './code_field/AnimatedCodeField'
 import CountDown from 'react-native-countdown-component'
 
 const VerifyScreen = () => {
-    // 2 issues: Resend btn needs to clear comfirmation code and reset timer countdown
+    // 1 issue: Resend btn needs to reset timer countdown
 
     const [btnPressed, setBtnPressed] =  useState(false)
     
@@ -24,7 +24,12 @@ const VerifyScreen = () => {
         [],
     )
 
-
+    const notify_codeCleared = useCallback(
+        (boolean) => {
+            setShouldClearCode(boolean)
+        },
+        [],
+    )
 
     const toggle_Btn = () => {
         setBtnPressed(!btnPressed)
@@ -37,7 +42,7 @@ const VerifyScreen = () => {
 
     const handle_resendBtn = () => {
         setSeconds(60)
-        setCodeValue('')
+        setShouldClearCode(true)
     }
 
     return (
@@ -63,7 +68,7 @@ const VerifyScreen = () => {
                     </TouchableOpacity>
                 </View>
             }
-            <AnimatedCodeField getValue={getValue} clearCode={true}/>
+            <AnimatedCodeField getValue={getValue} shouldClearCode={shouldClearCode} notifyCodeCleared={notify_codeCleared}/>
 
             <View style={styles.line}>
                 <Text style={{color: colors.text.light,fontSize: 12, lineHeight: 14, letterSpacing: 0.02, marginRight: 23}}>
@@ -72,7 +77,6 @@ const VerifyScreen = () => {
                 <CountDown
                         size={14}
                         until={seconds}
-                        
                         onFinish={() => alert('Code Expired!')}
                         digitStyle={{marginHorizontal: -4}}
                         digitTxtStyle={styles.timer}

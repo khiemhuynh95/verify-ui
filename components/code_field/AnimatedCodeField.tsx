@@ -16,7 +16,7 @@ import styles, {
   NOT_EMPTY_CELL_BG_COLOR,
 } from './styles';
 
-const {Value, Text: AnimatedText} = Animated;
+const {Value, Text: AnimatedText} = Animated;4
 
 const CELL_COUNT = 4;
 
@@ -38,7 +38,7 @@ const animateCell = ({hasValue, index, isFocused}) => {
   ]).start();
 };
 
-const AnimatedCodeField = ({getValue, clearCode}) => {
+const AnimatedCodeField = ({getValue, shouldClearCode, notifyCodeCleared}) => {
   
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
@@ -48,12 +48,18 @@ const AnimatedCodeField = ({getValue, clearCode}) => {
   });
 
   useEffect(() => {
-    getValue(value)//passing code value back to parent
-  }, [value])
+    console.log(shouldClearCode)
+    if (shouldClearCode) {
+      setValue('')
+      notifyCodeCleared(false)
+      getValue(value)
+    } else {
+      getValue(value)
+    }
+    //passing code value back to parent
+  }, [value, shouldClearCode])
 
-  useEffect(() => {
-    
-  }, [])
+ 
 
   const renderCell = ({index, symbol, isFocused}) => {
     const hasValue = Boolean(symbol);
